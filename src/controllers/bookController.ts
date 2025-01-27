@@ -1,29 +1,21 @@
 import { Request, Response } from "express";
 import * as bookService from "../services/bookService";
 
-export const getAllBooks = (req: Request, res: Response): void => {
-    try {
-        const { title, author, genre } = req.query;
-        let books = bookService.getAllBooks();
-        if (title) {
-            books = books.filter((book) =>
-                book.title.toLowerCase().includes((title as string).toLowerCase())
-            );
-        }
-        if (author) {
-            books = books.filter((book) =>
-                book.author.toLowerCase().includes((author as string).toLowerCase())
-            );
-        }
-        if (genre) {
-            books = books.filter((book) =>
-                book.genre.toLowerCase().includes((genre as string).toLowerCase())
-            );
-        }
-        res.status(200).json({ message: "Books retrieved", data: books });
-    } catch (error) {
-        res.status(500).json({ message: "Error retrieving books" });
-    }
+export const getBooks = (req: Request, res: Response): void => {
+    const { title, author, genre } = req.query;
+
+    const filters = {
+        title: title ? (title as string) : undefined,
+        author: author ? (author as string) : undefined,
+        genre: genre ? (genre as string) : undefined,
+    };
+
+    const books = bookService.getAllBooks(filters);
+
+    res.json({
+        message: "Books retrieved",
+        data: books,
+    });
 };
 
 export const addBook = (req: Request, res: Response): void => {

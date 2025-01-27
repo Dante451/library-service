@@ -24,9 +24,30 @@ const books: Book[] = [
     },
 ];
 
-export const getAllBooks = (): Book[] => {
-    return books;
+export const getAllBooks = (filters: { title?: string; author?: string; genre?: string }): Book[] => {
+    let filteredBooks = [...books];  
+
+    if (filters.title) {
+        filteredBooks = filteredBooks.filter((book) =>
+            book.title.toLowerCase().includes(filters.title.toLowerCase())
+        );
+    }
+
+    if (filters.author) {
+        filteredBooks = filteredBooks.filter((book) =>
+            book.author.toLowerCase().includes(filters.author.toLowerCase())
+        );
+    }
+
+    if (filters.genre) {
+        filteredBooks = filteredBooks.filter((book) =>
+            book.genre.toLowerCase().includes(filters.genre.toLowerCase())
+        );
+    }
+
+    return filteredBooks;
 };
+
 
 /**
  * Adds a new book to the library system.
