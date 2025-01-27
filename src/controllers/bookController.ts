@@ -3,7 +3,23 @@ import * as bookService from "../services/bookService";
 
 export const getAllBooks = (req: Request, res: Response): void => {
     try {
-        const books = bookService.getAllBooks();
+        const { title, author, genre } = req.query;
+        let books = bookService.getAllBooks();
+        if (title) {
+            books = books.filter((book) =>
+                book.title.toLowerCase().includes((title as string).toLowerCase())
+            );
+        }
+        if (author) {
+            books = books.filter((book) =>
+                book.author.toLowerCase().includes((author as string).toLowerCase())
+            );
+        }
+        if (genre) {
+            books = books.filter((book) =>
+                book.genre.toLowerCase().includes((genre as string).toLowerCase())
+            );
+        }
         res.status(200).json({ message: "Books retrieved", data: books });
     } catch (error) {
         res.status(500).json({ message: "Error retrieving books" });
